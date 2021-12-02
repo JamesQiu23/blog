@@ -65,6 +65,7 @@ public class AuthController extends BaseController {
 
         Integer error_count = cache.get("login_error_count");
         try {
+            //username:admin, password:123456
             UserVo user = usersService.login(username, password);
             request.getSession().setAttribute(WebConst.LOGIN_SESSION_KEY, user);
             if (StringUtils.isNotBlank(remeber_me)) {
