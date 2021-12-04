@@ -9,6 +9,7 @@ import com.my.blog.website.dto.Types;
 import com.my.blog.website.exception.TipException;
 import com.my.blog.website.modal.Bo.RestResponseBo;
 import com.my.blog.website.modal.Vo.*;
+import com.my.blog.website.modal.VoInput.RcUidParam;
 import com.my.blog.website.service.IContentService;
 import com.my.blog.website.service.ILogService;
 import com.my.blog.website.service.IMetaService;
@@ -65,6 +66,40 @@ public class RiskControlController extends BaseController {
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         RiskControlUidBo u1 = RiskControlUidBo.builder().id(1L).uid("123").banTag("M1").banDesc("天将降大任于斯人也").riskRank(1).riskScore(90).createTime(sdf.format(new Date())).build();
+//        RiskControlUidBo u2 = RiskControlUidBo.builder().id(2L).uid("234").banTag("M2").banDesc("必先苦其心志").riskRank(2).riskScore(60).createTime(sdf.format(new Date())).build();
+//        RiskControlUidBo u3 = RiskControlUidBo.builder().id(3L).uid("345").banTag("M3").banDesc("劳其筋骨").riskRank(3).riskScore(30).createTime(sdf.format(new Date())).build();
+//        RiskControlUidBo u4 = RiskControlUidBo.builder().id(4L).uid("456").banTag("M4").banDesc("饿其体肤").riskRank(0).riskScore(10).createTime(sdf.format(new Date())).build();
+        List<RiskControlUidBo> uidRcList = Lists.newArrayList(u1);
+        PageInfo<RiskControlUidBo> pageInfo = new PageInfo<>(uidRcList);
+        BeanUtils.copyProperties(contentsPaginator, pageInfo);
+        pageInfo.setList(uidRcList);
+
+        request.setAttribute("uidRcPageInfo", pageInfo);
+        return "admin/risk_control_list";
+    }
+
+
+    /**
+     * 风控条件查询
+     * @return
+     */
+    @PostMapping(value = "queryByCondition")
+    @ResponseBody
+    public String queryByCondition(@RequestParam String uid, @RequestParam Integer riskScore, @RequestParam Integer riskRank,
+                                   HttpServletRequest request) {
+        if (uid == null){
+            System.out.println("s");
+        }
+        System.out.println("hei");
+
+        ContentVoExample contentVoExample = new ContentVoExample();
+        contentVoExample.setOrderByClause("created desc");
+        contentVoExample.createCriteria().andTypeEqualTo(Types.ARTICLE.getType());
+        PageInfo<ContentVo> contentsPaginator = contentsService.getArticlesWithpage(contentVoExample,1,15);
+//        request.setAttribute("articles", contentsPaginator);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        RiskControlUidBo u1 = RiskControlUidBo.builder().id(1L).uid("123").banTag("M1").banDesc("天将降大任于斯人也").riskRank(1).riskScore(90).createTime(sdf.format(new Date())).build();
         RiskControlUidBo u2 = RiskControlUidBo.builder().id(2L).uid("234").banTag("M2").banDesc("必先苦其心志").riskRank(2).riskScore(60).createTime(sdf.format(new Date())).build();
         RiskControlUidBo u3 = RiskControlUidBo.builder().id(3L).uid("345").banTag("M3").banDesc("劳其筋骨").riskRank(3).riskScore(30).createTime(sdf.format(new Date())).build();
         RiskControlUidBo u4 = RiskControlUidBo.builder().id(4L).uid("456").banTag("M4").banDesc("饿其体肤").riskRank(0).riskScore(10).createTime(sdf.format(new Date())).build();
@@ -74,9 +109,10 @@ public class RiskControlController extends BaseController {
         pageInfo.setList(uidRcList);
 
         request.setAttribute("uidRcPageInfo", pageInfo);
+
+//        return RestResponseBo.ok();
         return "admin/risk_control_list";
     }
-
 
 
 }

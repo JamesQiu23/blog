@@ -54,10 +54,22 @@ $.tale.prototype.alertOk = function (options) {
  */
 $.tale.prototype.alertOkAndReload = function (text) {
     this.alertOk({text:text, then:function () {
-        setTimeout(function () {
-            window.location.reload();
-        }, 500);
-    }});
+            setTimeout(function () {
+                window.location.reload();
+            }, 500);
+        }});
+};
+
+/**
+ * 弹出成功，并在50毫秒后刷新页面
+ * @param text
+ */
+$.tale.prototype.alertOkAndReload50 = function (text) {
+    this.alertOk({text:text, then:function () {
+            setTimeout(function () {
+                window.location.reload();
+            }, 50);
+        }});
 };
 
 /**
